@@ -1,12 +1,24 @@
 <template>
-  <v-card class="mt-4 w-75">
-    <template v-slot:text>
+  <v-card class="ma-6 pa-4 w-75 d-flex flex-column" min-height="300px" min-width="250px">
+    <v-card-title class="text-h4 mb-4">
       {{ recipe.title }}
-    </template>
+    </v-card-title>
+    <v-card-text>
+      <CardIngredients :ingredients="recipe.ingredients"></CardIngredients>
+    </v-card-text>
+    <v-card-text class="my-3 mx-1">
+      {{ recipe.content }}
+    </v-card-text>
+    <div class="d-flex" v-for="(tag, index) in recipe.tagsRequired" :key="index">
+      <v-chip class="ma-1 text-white bg-blue-grey-darken-4"> {{ '#' + tag }}</v-chip>
+    </div>
+
   </v-card>
 </template>
+
 <script lang="ts" setup>
 import Recipe from '@/models/recipe'
+import CardIngredients from './CardIngredients.vue';
 defineProps<{
   recipe: Recipe
 }>()

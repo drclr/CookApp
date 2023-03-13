@@ -1,7 +1,10 @@
+import Ingredient from "./ingredient"
+
 export default interface Recipe {
   title: string
   content: string
-  tagRequired: string[]
+  tagsRequired: string[],
+  ingredients: { [key: string]: Ingredient }
 }
 
 export interface RecipeDisplayed {
