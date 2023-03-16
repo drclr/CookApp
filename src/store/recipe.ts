@@ -12,7 +12,7 @@ export const useRecipeStore = defineStore('recipe', {
     toDefineTagsSelectedFromForm(tags: string[]) {
       this.tagsSelected = tags;
     },
-    async getRecipesFromTags() {
+    async toDefineRecipesFromTags() {
       const db = useFirestore();
       const q = query(collection(db, "recipes"), where("tagsRequired", 'in', [this.tagsSelected]));
       const querySnapshot = await getDocs(q);

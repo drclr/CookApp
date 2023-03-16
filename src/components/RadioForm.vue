@@ -1,12 +1,15 @@
 <template>
-  <v-label class="text-black"> {{ label }}</v-label>
-  <v-radio-group class="text-black" @update:modelValue="$emit('update:modelValue', $event)" :model-value="modelValue">
-    <v-radio v-for="opt in options" :key="opt.value" :label="opt.label" :value="opt.value" :name="name">
-    </v-radio>
-  </v-radio-group>
-  <error-message v-slot="{ message }" :name="name">
-    <v-alert type="error"> {{ message }}</v-alert>
-  </error-message>
+  <div data-test="radio-form-component">
+    <v-label ref="label-radio-button" class="text-black"> {{ label }}</v-label>
+    <v-radio-group class="text-black" @update:modelValue="$emit('update:modelValue', $event)" :model-value="modelValue">
+      <v-radio :ref="'radio-button-' + opt.label" v-for="opt in options" :key="opt.value" :label="opt.label"
+        :value="opt.value" :name="name">
+      </v-radio>
+    </v-radio-group>
+    <error-message v-slot="{ message }" :name="name">
+      <v-alert type="error"> {{ message }}</v-alert>
+    </error-message>
+  </div>
 </template>
 <script lang='ts' setup>
 import { Option } from '../models/question';

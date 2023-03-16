@@ -1,7 +1,9 @@
 <template>
   <div class="d-flex flex-column align-center">
+
     <v-progress-circular v-if="store.recipesFromTags.length == 0" indeterminate></v-progress-circular>
-    <CardRecipe v-else v-for="item in store.recipesFromTags" :key="item.id" :recipe="item.recipe">
+    <CardRecipe v-else :data-test="item.recipe.title" v-for="item in store.recipesFromTags" :key="item.id"
+      :recipe="item.recipe">
     </CardRecipe>
   </div>
 </template>
@@ -12,6 +14,6 @@ import { useRecipeStore } from '@/store/recipe'
 
 const store = useRecipeStore();
 onMounted(async () => {
-  await store.getRecipesFromTags()
+  await store.toDefineRecipesFromTags()
 })
 </script>

@@ -4,7 +4,6 @@ export default interface Question {
   optionsRadio?: Array<Option>;
   optionsSelect?: string[];
   tagsToSelect: TagsToSelect,
-  isYetAnswered: boolean,
   tagsRequired: string[]
   id: string
 }

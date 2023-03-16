@@ -17,7 +17,7 @@ const routes = [
       {
         path: '/recipe',
         name: 'ResultRecipe',
-        component: () => import('@/views/AppRecipe.vue')
+        component: () => import('@/views/AppFormResults.vue')
       }
     ],
   },

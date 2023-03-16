@@ -1,10 +1,12 @@
 <template>
-  <v-select class="text-black" :name="name" :label="label" :items="options" :v-model="modelValue"
-    @update:modelValue="$emit('update:modelValue', $event)">
-  </v-select>
-  <error-message v-slot="{ message }" :name="name">
-    <v-alert type="error"> {{ message }}</v-alert>
-  </error-message>
+  <div data-test="select-form-component">
+    <v-select ref="form-select" class="text-black" :name="name" :label="label" :items="options" :v-model="modelValue"
+      @update:modelValue="$emit('update:modelValue', $event)">
+    </v-select>
+    <error-message v-slot="{ message }" :name="name">
+      <v-alert type="error"> {{ message }}</v-alert>
+    </error-message>
+  </div>
 </template>
 
 <script lang="ts" setup>

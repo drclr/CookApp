@@ -11,8 +11,6 @@
     <div class="w-50 pa-10 mt-10 flex-column align-center" min-width="300px">
 
     </div>
-    <div> {{ answersForm }}</div>
-    <div> {{ tagsSelected }}</div>
   </v-form>
 </template>
 <script lang="ts" setup>
@@ -41,7 +39,7 @@ const { handleSubmit } = useForm();
 
 
 onBeforeMount(async function () {
-  await toGetQuestions();
+  await toGetQuestionsFromTagsSelected();
 });
 
 
@@ -56,7 +54,7 @@ const onSubmit = handleSubmit(async () => {
   const numberRecipes = await toGetRecipesNumberWithSelectedTags();
   console.log(numberRecipes);
   if (numberRecipes != 1) {
-    toGetQuestions();
+    toGetQuestionsFromTagsSelected();
   } else {
     storeRecipe.toDefineTagsSelectedFromForm(tagsSelected.value);
     router.push('/recipe');
@@ -69,7 +67,7 @@ async function toGetRecipesNumberWithSelectedTags() {
   return snapshot.data().count;
 }
 
-async function toGetQuestions() {
+async function toGetQuestionsFromTagsSelected() {
   questionsStep.value = [];
   answersForm.value = {};
   let question = {} as Question;
@@ -86,7 +84,7 @@ async function toGetQuestions() {
 function resetForm() {
   answersForm.value = {};
   tagsSelected.value = [];
-  toGetQuestions();
+  toGetQuestionsFromTagsSelected();
 }
 
 </script>
