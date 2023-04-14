@@ -8,6 +8,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  /*
   test: {
     deps: {
       inline: ["vuetify"],
@@ -15,7 +16,7 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
   },
-
+  */
   plugins: [
     vue({
       template: { transformAssetUrls }
