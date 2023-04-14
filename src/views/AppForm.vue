@@ -1,30 +1,27 @@
 <template>
-  <v-form class="d-flex flex-column align-center" @submit.prevent="onSubmit">
-    <CardQuestion v-for="question in questionsStep" :key="question.id" v-model="answersForm[question.id]"
-      :currentQuestion="question">
-    </CardQuestion>
-    <v-btn class="mt-4 text-blue-grey-darken-5 bg-yellow-darken-1" type="submit">
-      Suivant
-      <v-icon icon="mdi-arrow-right"></v-icon>
-    </v-btn>
-    <v-btn class="ma-4 text-blue-grey-darken-5 bg-yellow-darken-1" @click="resetForm()"> Reset form </v-btn>
-    <div class="w-50 pa-10 mt-10 flex-column align-center" min-width="300px">
-
-    </div>
-  </v-form>
+  <div class="d-flex justify-center w-100">
+    <v-progress-circular v-if="questionsStep.length == 0" indeterminate></v-progress-circular>
+    <v-form v-else class="w-100 d-flex flex-column align-center" @submit.prevent="onSubmit">
+      <CardQuestion v-for="question in questionsStep" :key="question.id" v-model="answersForm[question.id]"
+        :currentQuestion="question">
+      </CardQuestion>
+      <v-btn class="my-10 text-green-darken-3" type="submit">
+        Next
+        <v-icon icon="mdi-arrow-right"></v-icon>
+      </v-btn>
+    </v-form>
+  </div>
 </template>
 <script lang="ts" setup>
-
 import { useFirestore } from 'vuefire';
 import CardQuestion from '../components/CardQuestion.vue';
 import { ref, onBeforeMount } from 'vue';
 import Question from '../models/question';
 import { useForm } from 'vee-validate';
-import { getDocs, /*addDoc,*/ query, where, collection, getCountFromServer } from "firebase/firestore";
+import { getDocs, /*addDoc,*/ query, where, /*getCountFromServer, getFirestore,*/ collection } from "firebase/firestore";
 import { useRouter } from 'vue-router';
-import { useRecipeStore } from '@/store/recipe'
+import { useRecipeStore } from '@/store/recipe';
 const router = useRouter();
-
 const db = useFirestore();
 const storeRecipe = useRecipeStore();
 
@@ -36,55 +33,60 @@ const questionsStep = ref<Question[]>([]);
 const answersForm = ref<Answers>({});
 const tagsSelected = ref<string[]>([]);
 const { handleSubmit } = useForm();
+const step = ref(0);
 
 
 onBeforeMount(async function () {
-  await toGetQuestionsFromTagsSelected();
+  await toGetQuestions();
 });
 
 
 const onSubmit = handleSubmit(async () => {
-  for (const question of questionsStep.value) {
-    const answer = answersForm.value[question.id];
-    const tag = question.tagsToSelect[answer as string];
-    if (!tagsSelected.value.includes(tag) && tag) {
-      tagsSelected.value.push(tag);
+  for (const tag of Object.values(answersForm.value)) {
+    if ((tag != 'noTag') && (!tagsSelected.value.includes(tag as string))) {
+      tagsSelected.value.push(tag as string);
     }
   }
-  const numberRecipes = await toGetRecipesNumberWithSelectedTags();
-  console.log(numberRecipes);
-  if (numberRecipes != 1) {
-    toGetQuestionsFromTagsSelected();
+  tagsSelected.value.sort();
+  if (step.value != 1) {
+    step.value++;
+    await toGetQuestions();
+    if (questionsStep.value.length == 0) {
+      await toDisplayResults();
+    }
   } else {
-    storeRecipe.toDefineTagsSelectedFromForm(tagsSelected.value);
-    router.push('/recipe');
-  }
-});
+    await toDisplayResults();
 
-async function toGetRecipesNumberWithSelectedTags() {
-  const q = query(collection(db, "recipes"), where("tagsRequired", 'in', [tagsSelected.value]));
-  const snapshot = await getCountFromServer(q);
-  return snapshot.data().count;
+  }
+}
+);
+
+async function toDisplayResults() {
+  await storeRecipe.toDefineRecipesFromTags(tagsSelected.value);
+  router.push('/recipes');
 }
 
-async function toGetQuestionsFromTagsSelected() {
+async function toGetQuestions() {
   questionsStep.value = [];
   answersForm.value = {};
   let question = {} as Question;
-  const q = query(collection(db, "questions"), where("tagsRequired", 'in', [tagsSelected.value]));
+  let q;
+  if (step.value == 0) {
+    q = query(collection(db, "questions"), where("isStepIni", '==', true));
+  } else {
+    let tagsBdd = {} as { [key: string]: string };
+    for (let i = 0; i < tagsSelected.value.length; i++) {
+      tagsBdd[i] = tagsSelected.value[i];
+    }
+    q = query(collection(db, "questions"), where("combinations", 'array-contains', tagsBdd));
+  }
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     question = doc.data() as Question;
     question.id = 'field' + questionsStep.value.length.toString();
     answersForm.value[question.id] = null;
     questionsStep.value.push(question);
-  })
-}
-
-function resetForm() {
-  answersForm.value = {};
-  tagsSelected.value = [];
-  toGetQuestionsFromTagsSelected();
+  });
 }
 
 </script>

@@ -1,3 +1,4 @@
+<!--
 <template>
   <div data-test="select-form-component">
     <v-select ref="form-select" class="text-black" :name="name" :label="label" :items="options" :v-model="modelValue"
@@ -23,3 +24,4 @@ useField(props.name, yup.string().required('At least one item must be selected')
 }
 );
 </script>
+-->

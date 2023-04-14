@@ -1,13 +1,10 @@
 import Ingredient from "./ingredient"
 
 export default interface Recipe {
-  title: string
-  content: string
-  tagsRequired: string[],
+  id: string
+  title: string,
+  content: string[],
+  preparationTime: string,
+  cookingTime: string,
   ingredients: { [key: string]: Ingredient }
-}
-
-export interface RecipeDisplayed {
-  id: string,
-  recipe: Recipe
 }

@@ -16,7 +16,7 @@ const ThemeApp: ThemeDefinition = {
   dark: false,
   colors: {
     background: '#263238',
-    surface: '#FFFFFF',
+    surface: '#FAFAFA',
     error: '#D32F2F',
   }
 }

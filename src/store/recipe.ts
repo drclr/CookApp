@@ -1,24 +1,24 @@
 import { defineStore } from 'pinia'
-import Recipe, { RecipeDisplayed } from '@/models/recipe'
+import Recipe from '@/models/recipe'
 import { query, where, collection, getDocs } from "firebase/firestore"
 import { useFirestore } from 'vuefire';
 
 export const useRecipeStore = defineStore('recipe', {
   state: () => ({
-    tagsSelected: [] as string[],
-    recipesFromTags: [] as RecipeDisplayed[]
+    recipesFromTags: [] as Recipe[]
   }),
   actions: {
-    toDefineTagsSelectedFromForm(tags: string[]) {
-      this.tagsSelected = tags;
-    },
-    async toDefineRecipesFromTags() {
+    async toDefineRecipesFromTags(tagsSelected: string[]) {
       const db = useFirestore();
-      const q = query(collection(db, "recipes"), where("tagsRequired", 'in', [this.tagsSelected]));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        this.recipesFromTags.push({ id: doc.id, recipe: (doc.data() as Recipe) })
-      })
-    }
-  }
-})
+      if (tagsSelected.length > 0) {
+        const tagsContraints = tagsSelected.map(tag => where(`tags.${tag}`, '==', true));
+        const q = query(collection(db, 'recipes'), ...tagsContraints);
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          this.recipesFromTags.push({ ...doc.data() as Recipe, id: doc.id });
+        })
+      }
+    },
+    toResetRecipesFromTags() { this.recipesFromTags = [] },
+  },
+});

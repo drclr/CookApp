@@ -15,9 +15,14 @@ const routes = [
         component: () => import(/* webpackChunkName: "home" */ '@/views/AppForm.vue'),
       },
       {
-        path: '/recipe',
+        path: '/recipes',
         name: 'ResultRecipe',
         component: () => import('@/views/AppFormResults.vue')
+      },
+      {
+        path: '/recipe/:id',
+        name: 'CardRecipe',
+        component: () => import('@/components/CardRecipe.vue')
       }
     ],
   },

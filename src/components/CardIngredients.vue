@@ -1,14 +1,16 @@
 <template>
-  <div v-for="item in ingredients" :ingredient="item" :key="item.name" :data-test="item.name">
-    <span v-if="item.unit == 'none' && item.quantity == '1'">
-      {{ item.quantity + ' ' + item.name }}
-    </span>
-    <span v-if="item.unit == 'none' && item.quantity != '1'">
-      {{ item.quantity + ' ' + item.name + 's' }}
-    </span>
-    <span v-if="item.unit != 'none'">
-      {{ item.name + ' : ' + item.quantity + ' ' + item.unit }}
-    </span>
+  <div class="my-10 mx-5 d-flex flex-column justify-center">
+    <div v-for="item in ingredients" :ingredient="item" :key="item.name" :data-test="item.name">
+      <span class="text-overline" v-if="item.unit == 'none' && item.quantity == '1'">
+        {{ item.quantity + ' ' + item.name }}
+      </span>
+      <span class="text-overline" v-if="item.unit == 'none' && item.quantity != '1'">
+        {{ item.quantity + ' ' + item.name + 's' }}
+      </span>
+      <span class="text-overline" v-if="item.unit != 'none'">
+        {{ item.name + ' : ' + item.quantity + ' ' + item.unit }}
+      </span>
+    </div>
   </div>
 </template>
 
@@ -19,5 +21,3 @@ defineProps<{
 }>();
 
 </script>
-
-<style scoped></style>
