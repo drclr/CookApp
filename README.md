@@ -1,9 +1,11 @@
 # Cook App
-Vuejs 3 Web App to display recipes depending on user preferences.
+Fullstack app powered by Firebase and Vue 3 to hone my front end skills.
 
-The responsive Web app enables users to respond to a dynamical questionnaire and read through recipes depending on previous answers.
+The responsive app displays recipes depending on user preferences.
 
-[Click here](https://find-recipe-ideas.netlify.app/) to access to it.
+It enables users to respond to a dynamical questionnaire and read through recipes depending on previous answers.
+
+Deployed with Netlify, checkout your next recipe [here](https://find-recipe-ideas.netlify.app/).
 
 ## Technologies
 
@@ -13,7 +15,7 @@ The responsive Web app enables users to respond to a dynamical questionnaire and
 - Firebase
 
 ## Installation and usage
-To run this project, add a .env file with required firebase settings:
+To run this project, add a .env file with required Firebase settings:
 ```bash
 VITE_FIREBASE_API_KEY = ...
 VITE_FIREBASE_AUTH_DOMAIN = ...
