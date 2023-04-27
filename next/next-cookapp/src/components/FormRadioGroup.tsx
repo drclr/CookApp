@@ -1,6 +1,24 @@
 import { FormLabel, RadioGroup, FormControlLabel, Radio, FormControl, FormHelperText } from "@mui/material";
+import { Option } from '@/models/question';
+import { SyntheticEvent } from 'react';
 
-export default function FormRadioGroup({ optionsRadio, label, indexQuestion, error, currentValue, handleAnswer }) {
+type RadioGroupProp = {
+  optionsRadio: Option[],
+  label: string,
+  indexQuestion: number,
+  error: boolean,
+  currentValue: string | null,
+  handleAnswer: (value: string, index: number) => void,
+}
+
+type RadioProp = {
+  value: string,
+  currentValue: string | null,
+  label: string,
+  handleChange: (event: SyntheticEvent) => void;
+}
+
+export default function FormRadioGroup({ optionsRadio, label, indexQuestion, error, currentValue, handleAnswer }: RadioGroupProp) {
 
 
   const radioButtons = optionsRadio.map((opt, indexButton) => {
@@ -14,8 +32,8 @@ export default function FormRadioGroup({ optionsRadio, label, indexQuestion, err
       <FormLabel id={'question-' + indexQuestion}>{label}</FormLabel>
       <RadioGroup
         aria-labelledby={'question-' + indexQuestion}
-        defaultValue="null"
-        name="radio-buttons-group"
+        defaultValue={null}
+        name={'radio-buttons-group' + indexQuestion}
       >
         {radioButtons}
       </RadioGroup>
@@ -24,6 +42,6 @@ export default function FormRadioGroup({ optionsRadio, label, indexQuestion, err
   </div>)
 }
 
-export function FormRadio({ value, currentValue, label, handleChange }) {
+export function FormRadio({ value, currentValue, label, handleChange }: RadioProp) {
   return (<FormControlLabel value={value} control={<Radio />} label={label} onChange={handleChange} checked={currentValue == value} />)
 }

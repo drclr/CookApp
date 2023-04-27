@@ -1,30 +1,31 @@
 import Head from 'next/head'
 import FormRadioGroup from '@/components/FormRadioGroup'
-import { useState } from 'react'
+import { SyntheticEvent, useState, useEffect, StrictMode } from 'react'
 import Button from '@mui/material/Button'
 import { firebaseApp } from '@/firebase'
-import { useEffect, StrictMode } from 'react'
-import { getDocs, /*addDoc,*/ query, where, /*getCountFromServer,*/ getFirestore, collection } from 'firebase/firestore'
+import Question from '@/models/question'
+import { getDocs, /*addDoc,*/ query, where, /*getCountFromServer,*/ getFirestore, collection, QuerySnapshot, DocumentData } from 'firebase/firestore'
 const db = getFirestore(firebaseApp);
 
 
 export default function Home() {
-  const [questionsStep, setQuestionsStep] = useState([]);
-  const [answersForm, setAnswerForm] = useState([]);
-  const [errorStatusQuestions, setErrorStatusQuestions] = useState([]);
-  const [tagsSelected, setTagsSelected] = useState([]);
+  const [questionsStep, setQuestionsStep] = useState<Question[]>([]);
+  const [answersForm, setAnswerForm] = useState<(string | null)[]>([]);
+  const [errorStatusQuestions, setErrorStatusQuestions] = useState<boolean[]>([]);
+  const [tagsSelected, setTagsSelected] = useState<string[]>([]);
 
-  function toGetQuestionsBack(querySnapshot) {
-    let question;
-    let questions = [];
+  function toGetQuestionsBack(querySnapshot: QuerySnapshot<DocumentData>) {
+    let question: Question;
+    let questions: Question[] = [];
     querySnapshot.forEach((doc) => {
-      question = doc.data();
+      question = doc.data() as Question;
       questions.push(question);
     });
-    setAnswerForm(Array(questions.length).fill(null));
-    setErrorStatusQuestions(Array(questions.length).fill(false))
-    setQuestionsStep([...questions]);
-
+    if (questions.length > 0) {
+      setAnswerForm(Array(questions.length).fill(null));
+      setErrorStatusQuestions(Array(questions.length).fill(false));
+      setQuestionsStep([...questions]);
+    }
   }
 
   useEffect(() => {
@@ -36,10 +37,7 @@ export default function Home() {
     toGetQuestionsIni();
   }, [])
 
-
-
-
-  function handleAnswer(value, index) {
+  function handleAnswer(value: string, index: number) {
     if (errorStatusQuestions[index]) {
       const newErrorStatusQuestions = errorStatusQuestions.slice();
       newErrorStatusQuestions[index] = false;
@@ -60,7 +58,7 @@ export default function Home() {
     setErrorStatusQuestions(newErrorStatusQuestions);
   }
 
-  async function handleSubmit(event) {
+  async function handleSubmit(event: SyntheticEvent) {
     event.preventDefault();
     const isFormNotFilled = answersForm.includes(null);
     if (isFormNotFilled) {
@@ -69,7 +67,7 @@ export default function Home() {
       const tags = tagsSelected.slice();
       answersForm.forEach((item) => {
         if (item != 'noTag') {
-          tags.push(item);
+          tags.push(item as string);
         }
       })
       tags.sort();
