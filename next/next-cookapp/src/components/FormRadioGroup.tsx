@@ -1,4 +1,4 @@
-import { FormLabel, RadioGroup, FormControlLabel, Radio, FormControl, FormHelperText } from "@mui/material";
+import { FormLabel, RadioGroup, FormControlLabel, Radio, FormControl, FormHelperText, Card } from "@mui/material";
 import { Option } from '@/models/question';
 import { SyntheticEvent } from 'react';
 
@@ -27,19 +27,20 @@ export default function FormRadioGroup({ optionsRadio, label, indexQuestion, err
 
   const textHelper = (error ? 'At least one item must be selected' : '');
 
-  return (<div>
-    <FormControl error={error}>
-      <FormLabel id={'question-' + indexQuestion}>{label}</FormLabel>
-      <RadioGroup
-        aria-labelledby={'question-' + indexQuestion}
-        defaultValue={null}
-        name={'radio-buttons-group' + indexQuestion}
-      >
-        {radioButtons}
-      </RadioGroup>
-      <FormHelperText>{textHelper}</FormHelperText>
-    </FormControl>
-  </div>)
+  return (
+    <Card variant="outlined" sx={{ width: 3 / 4, minWidth: 280, m: 2, p: 2 }}>
+      <FormControl error={error}>
+        <FormLabel id={'question-' + indexQuestion}>{label}</FormLabel>
+        <RadioGroup
+          aria-labelledby={'question-' + indexQuestion}
+          defaultValue={null}
+          name={'radio-buttons-group' + indexQuestion}
+        >
+          {radioButtons}
+        </RadioGroup>
+        <FormHelperText>{textHelper}</FormHelperText>
+      </FormControl>
+    </Card>)
 }
 
 export function FormRadio({ value, currentValue, label, handleChange }: RadioProp) {
