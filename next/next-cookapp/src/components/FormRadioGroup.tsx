@@ -15,14 +15,15 @@ type RadioProp = {
   value: string,
   currentValue: string | null,
   label: string,
-  handleChange: (event: SyntheticEvent) => void;
+  handleChange: (event: SyntheticEvent<Element, Event>) => void;
 }
 
 export default function FormRadioGroup({ optionsRadio, label, indexQuestion, error, currentValue, handleAnswer }: RadioGroupProp) {
 
 
   const radioButtons = optionsRadio.map((opt, indexButton) => {
-    return (<FormRadio currentValue={currentValue} key={'radio' + indexButton} value={opt.value} label={opt.label} handleChange={(event) => handleAnswer(event.target.value, indexQuestion)}></FormRadio>)
+    return (<FormRadio currentValue={currentValue} key={'radio' + indexButton} value={opt.value} label={opt.label} handleChange={(event) => handleAnswer((event.target as HTMLInputElement).value, indexQuestion)
+    }></FormRadio >)
   })
 
   const textHelper = (error ? 'At least one item must be selected' : '');

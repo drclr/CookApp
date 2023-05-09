@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef } from 'react';
-import { getDocs, query, where, getFirestore, collection } from 'firebase/firestore';
+import { getDocs, query, where, getFirestore, collection, DocumentData, Query } from 'firebase/firestore';
 import { firebaseApp } from '@/firebase';
 import RecipeCard from '@/components/RecipeCard';
 import Recipe from '@/models/recipe';
@@ -16,9 +16,14 @@ export default function FormResults() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   async function toGetRecipes() {
-    if (tags.current && tags.current.length > 0) {
-      const tagsContraints = tags.current.map(tag => where(`tags.${tag}`, '==', true));
-      const q = query(collection(db, 'recipes'), ...tagsContraints);
+    if (tags.current) {
+      let q: Query<DocumentData>;
+      if (Array.isArray(tags.current)) {
+        const tagsContraints = tags.current.map(tag => where(`tags.${tag}`, '==', true));
+        q = query(collection(db, 'recipes'), ...tagsContraints);
+      } else {
+        q = query(collection(db, 'recipes'), where(`tags.${tags.current}`, '==', true));
+      }
       const querySnapshot = await getDocs(q);
       let recipesArr: Recipe[] = [];
       querySnapshot.forEach((doc) => {

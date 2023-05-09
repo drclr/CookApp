@@ -14,13 +14,12 @@ export default function FormQuestions() {
   const [questionsStep, setQuestionsStep] = useState<Question[]>([]);
   const [answersForm, setAnswerForm] = useState<(string | null)[]>([]);
   const [errorStatusQuestions, setErrorStatusQuestions] = useState<boolean[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const currentStep = useRef(0);
   const tagsSelected = useRef<string[]>([]);
   const maxStep = 1;
 
   async function toGetQuestionsBack(query: Query<DocumentData>) {
-    setLoading(true);
     const querySnapshot = await getDocs(query);
     let question: Question;
     let questions: Question[] = [];
@@ -74,11 +73,13 @@ export default function FormQuestions() {
         }
       })
       tagsSelected.current.sort();
+
       let tagsBdd = {} as { [key: string]: string };
       for (let i = 0; i < tagsSelected.current.length; i++) {
         tagsBdd[i] = tagsSelected.current[i];
       }
       if (currentStep.current < maxStep) {
+        setLoading(true);
         toGetQuestionsBack(query(collection(db, "questions"), where("combinations", 'array-contains', tagsBdd)));
         currentStep.current++;
       } else {

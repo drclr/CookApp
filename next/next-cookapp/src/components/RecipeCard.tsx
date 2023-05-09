@@ -1,9 +1,9 @@
-import { CardActions, CardHeader, Collapse, Grid, IconButton, IconButtonProps, styled } from '@mui/material';
-import Card from '@mui/material/Card';
-import { useState } from 'react';
-import Recipe from '@/models/recipe';
-import RecipeContent from '@/components/RecipeContent';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { CardActions, CardHeader, Collapse, Grid, IconButton, IconButtonProps, styled } from '@mui/material'
+import Card from '@mui/material/Card'
+import { useState } from 'react'
+import Recipe from '@/models/recipe'
+import RecipeContent from '@/components/RecipeContent'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -45,7 +45,6 @@ export default function RecipeCard({ recipe }: PropRecipeCard) {
         >
           <ExpandMoreIcon />
         </Expand>
-
       </CardActions>
       <Collapse in={isDetailsShown} timeout="auto" unmountOnExit>
         <RecipeContent recipe={recipe}></RecipeContent>
